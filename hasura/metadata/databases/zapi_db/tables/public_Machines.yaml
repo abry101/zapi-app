@@ -1,0 +1,22 @@
+table:
+  name: Machines
+  schema: public
+object_relationships:
+  - name: parent
+    using:
+      foreign_key_constraint_on: parentId
+array_relationships:
+  - name: machinery
+    using:
+      foreign_key_constraint_on:
+        column: machineId
+        table:
+          name: Machinery
+          schema: public
+  - name: machines
+    using:
+      foreign_key_constraint_on:
+        column: parentId
+        table:
+          name: Machines
+          schema: public

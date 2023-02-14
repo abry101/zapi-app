@@ -1,0 +1,10 @@
+table:
+  name: Machinery
+  schema: public
+object_relationships:
+  - name: machine
+    using:
+      foreign_key_constraint_on: machineId
+  - name: user
+    using:
+      foreign_key_constraint_on: userId

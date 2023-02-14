@@ -1,0 +1,11 @@
+table:
+  name: Users
+  schema: public
+array_relationships:
+  - name: machinery
+    using:
+      foreign_key_constraint_on:
+        column: userId
+        table:
+          name: Machinery
+          schema: public

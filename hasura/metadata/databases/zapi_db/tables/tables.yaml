@@ -1,0 +1,5 @@
+- "!include public_Addresses.yaml"
+- "!include public_Location.yaml"
+- "!include public_Machinery.yaml"
+- "!include public_Machines.yaml"
+- "!include public_Users.yaml"

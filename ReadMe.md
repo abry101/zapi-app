@@ -73,7 +73,9 @@ docker compose up -d --build ------------------ same except here we force an ima
 docker compose -f docker-compose.yml -f docker-compose.dev.yml -p <project-name> up -d --build
 docker compose -f docker-compose.yml -f docker-compose.dev.yml -p <project-name> down
 
-hasura console --envfile <relativepath e.g "../**/.envfile, ~/**/.envfile, ,/\*\*/.envfile or just the .envfile">
+hasura console --envfile <relative-path-envfile>
+hasura console --envfile ../utils/development.env
+hasura console --envfile production.env
 
 https://via.placeholder.com/150.png
 https://via.placeholder.com/150/000000/FFFFFF/?text=Dummy+Image.net
