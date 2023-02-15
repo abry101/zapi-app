@@ -120,15 +120,6 @@ CREATE SEQUENCE public."Users_id_seq"
     NO MAXVALUE
     CACHE 1;
 ALTER SEQUENCE public."Users_id_seq" OWNED BY public."Users".id;
-CREATE TABLE public.account (
-    avatar_gravatar_hash text,
-    id integer,
-    iso_639_1 text,
-    iso_3166_1 text,
-    name text,
-    include_adult text,
-    username text
-);
 CREATE TABLE public.movie (
     adult text,
     backdrop_path integer,
