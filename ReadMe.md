@@ -48,8 +48,8 @@ docker compose [OPTIONS] [COMMANDS]
 [OPTIONS]:
 --env-file string -------------------------------------- Specify an alternate environment file.
 -f, --file string -------------------------------------- Specify a single or multiple compose file
---project-directory string ---------------------------- Specify an alternate working directory (default: the path of ` the, first specified, Compose file)
--p, --project-name string -------------------------------------- Project name
+--project-directory string ----------------------------- Specify an alternate working directory (default: the path of ` the, first specified, Compose file)
+-p, --project-name string ------------------------------ Project name
 
 [COMMANDS]:
 up -------------------------------------- Create and start containers
