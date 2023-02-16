@@ -106,7 +106,6 @@ CREATE TABLE public."Users" (
     "photoUrl" text NOT NULL,
     "isActivated" boolean DEFAULT false NOT NULL,
     "isApproved" boolean DEFAULT false NOT NULL,
-    "activationKey" uuid DEFAULT public.gen_random_uuid() NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     spam boolean DEFAULT false NOT NULL,
     created_at timestamp with time zone DEFAULT now(),
