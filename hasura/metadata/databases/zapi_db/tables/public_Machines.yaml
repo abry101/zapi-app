@@ -2,18 +2,18 @@ table:
   name: Machines
   schema: public
 object_relationships:
-  - name: parent
+  - name: Machine
     using:
       foreign_key_constraint_on: parentId
 array_relationships:
-  - name: machinery
+  - name: Machinery
     using:
       foreign_key_constraint_on:
         column: machineId
         table:
           name: Machinery
           schema: public
-  - name: machines
+  - name: Machines
     using:
       foreign_key_constraint_on:
         column: parentId

@@ -2,7 +2,14 @@ table:
   name: Users
   schema: public
 array_relationships:
-  - name: machinery
+  - name: Addresses
+    using:
+      foreign_key_constraint_on:
+        column: userId
+        table:
+          name: Addresses
+          schema: public
+  - name: Machinery
     using:
       foreign_key_constraint_on:
         column: userId

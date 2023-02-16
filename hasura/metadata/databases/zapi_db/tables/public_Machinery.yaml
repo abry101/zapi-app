@@ -2,9 +2,17 @@ table:
   name: Machinery
   schema: public
 object_relationships:
-  - name: machine
+  - name: Machine
     using:
       foreign_key_constraint_on: machineId
-  - name: user
+  - name: User
     using:
       foreign_key_constraint_on: userId
+array_relationships:
+  - name: Locations
+    using:
+      foreign_key_constraint_on:
+        column: machineryId
+        table:
+          name: Location
+          schema: public

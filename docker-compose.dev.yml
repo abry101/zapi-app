@@ -1,0 +1,16 @@
+version: '3.6'
+services:
+  node_app:
+    build:
+      args:
+        - NODE_ENV=development
+    volumes:
+      - './src:/app/src:ro'
+      # - "/app/node_modules" // only if we want to avoid overriding certain forlder
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+
+  graphql-engine:
+    env_file:
+      - ./development.env
