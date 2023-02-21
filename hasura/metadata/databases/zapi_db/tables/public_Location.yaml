@@ -1,7 +1,0 @@
-table:
-  name: Location
-  schema: public
-object_relationships:
-  - name: Machinery
-    using:
-      foreign_key_constraint_on: machineryId

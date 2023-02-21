@@ -7,7 +7,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=abry
+      - PG_PASSWORD=abry
 
   node_app:
     container_name: node_app

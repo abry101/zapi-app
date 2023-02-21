@@ -1,18 +1,64 @@
 table:
-  name: Users
+  name: users
   schema: public
 array_relationships:
-  - name: Addresses
+  - name: movie_owned
     using:
-      foreign_key_constraint_on:
-        column: userId
-        table:
-          name: Addresses
+      manual_configuration:
+        column_mapping:
+          id: owner
+        insertion_order: null
+        remote_table:
+          name: movies
           schema: public
-  - name: Machinery
-    using:
-      foreign_key_constraint_on:
-        column: userId
-        table:
-          name: Machinery
-          schema: public
+insert_permissions:
+  - role: customer
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - isVerified
+        - id
+        - email_address
+        - first_name
+        - last_name
+        - password
+        - created_at
+        - updated_at
+select_permissions:
+  - role: customer
+    permission:
+      columns:
+        - first_name
+        - last_name
+        - email_address
+        - password
+        - isVerified
+        - id
+        - created_at
+        - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
+update_permissions:
+  - role: customer
+    permission:
+      columns:
+        - email_address
+        - first_name
+        - isVerified
+        - last_name
+        - password
+        - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: customer
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
