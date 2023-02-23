@@ -1,4 +1,2 @@
-- "!include public_addresses.yaml"
-- "!include public_cinemas.yaml"
 - "!include public_movies.yaml"
 - "!include public_users.yaml"

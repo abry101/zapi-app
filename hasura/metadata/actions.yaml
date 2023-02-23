@@ -1,18 +1,6 @@
-actions:
-  - name: Login
-    definition:
-      kind: synchronous
-      handler: http://host.docker.internal:3000
-    comment: login
-  - name: Signup
-    definition:
-      kind: synchronous
-      handler: http://host.docker.internal:3000
-    comment: signup
+actions: []
 custom_types:
   enums: []
   input_objects: []
-  objects:
-    - name: CreateUserOutput
-    - name: JsonWebToken
+  objects: []
   scalars: []
