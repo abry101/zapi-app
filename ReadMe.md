@@ -137,13 +137,21 @@ https://via.placeholder.com/150/000000/FFFFFF/?text=Dummy+Image.net <br><br>
 
 <br/>
 
-> ## 7. Hasura CLI
->
-> 1. npm install --save-dev hasura-cli ---- install hasura cli per-project  
->    `usage: npx hasura [commands] [flags]`
-> 2. npm install --global hasura-cli ---- install hasura cli globaly  
->    `usage: hasura [commands] [flags]`
-> 3. run: `hasura version`<br><br>
+## **Hasura CLI**
+
+### **Install Hasura CLI**
+
+npm install --save-dev hasura-cli ---- install hasura cli per-project
+
+- `usage: npx hasura [commands] [flags]`
+
+npm install --global hasura-cli ---- install hasura cli globaly
+
+- `usage: hasura [commands] [flags]`
+
+run: `hasura version`<br><br>
+
+### **Intializing Hasura CLI**
 
 `hasura init [directory-name] [flags]`
 
@@ -164,7 +172,7 @@ See https://hasura.io/docs/latest/hasura-cli/commands/hasura_init/
 
 <br><br>
 
-# Add Migrations and Metadata to version control
+## **Add Migrations and Metadata to version control**
 
 initialize version control  
 `git init`
@@ -175,7 +183,7 @@ commit initial project status
 
 <br><br>
 
-# Use the Console served by the CLI
+## **Use the Console served by the CLI**
 
 **`hasura console [flags]`**  
  flags:
@@ -189,16 +197,16 @@ commit initial project status
 - `--endpoint string                http(s) endpoint for Hasura GraphQL Engine (env "HASURA_GRAPHQL_ENDPOINT")`
 - `--envfile string      .env filename to load ENV vars from (default ".env")`
 
-Recommended :
+# Examples :
 
 - `hasura console --envfile` -> most of the flags mentioned above, they've already reside in the .env file
 - `hasura console --envfile ../utils/dev.env`
 - `hasura console --envfile prod.env`
 
-# Migrate database schema
+## **Manage Migration**
 
 **`hasura migrate [commands] [flags]`**  
-commands: ['apply', 'create', 'init', 'delete', 'squash', 'status' ]
+commands: [apply, create, "init", delete, squash, status]
 
 flags:
 
@@ -208,18 +216,221 @@ flags:
 - `--endpoint string                http(s) endpoint for Hasura GraphQL Engine (env "HASURA_GRAPHQL_ENDPOINT")`
 - `--envfile string                 .env filename to load ENV vars from (default ".env")`
 
-Recommended :
+# Examples :
+
+### **Create Migration**
 
 Create an initial Migration with the current database schema
 
 - `hasura migrate create "init" --from-server`
 
-creating empty migration with up & down file
+creating empty migration with up.sql & down.sql file
 
 - `hasura migrate create <name-of-migration> --database-name <database-name>`
 
-Syncing the Migration with Metadata
+### **Apply Migrations**
+
+for applying existing migrations to local(`e.g. https://localhost:8080`) instance
+
+- `hasura migrate apply --database-name <database-name> --admin-secret <admin-secret>`
+
+for applying existing migrations to remote(`e.g. https://xxx.hasura.app`) instance
+
+- `hasura migrate apply --endpoint https://xxx.hasura.app --admin-secret <admin-secret>`
+
+for applying a specific migration to local or remote instance
+
+- `hasura migrate apply --database-name <database-name> --admin-secret <admin-secret> --version <version>`
+- `hasura migrate apply --endpoint https://xxx.hasura.app --admin-secret <admin-secret> --version <version>`
+- `hasura migrate apply --envfile example.env --version <version>`
+
+marking a migration as applied on the server by skipping the execution
+
+- `hasura migrate apply --database-name <database-name> --version <version> --skip-execution`
+
+### **Rolling back applied Migrations**
+
+- `hasura migrate apply --version 1550925483858 --type down --database-name <database-name>`
+
+### **Squash Migrations**
+
+- `hasura migrate squash --name "<new-name>" --from <start-migration-version> --database-name <database-name>`
+- `hasura migrate apply --version "<squashed-migration-version>" --skip-execution --database-name <database-name>`
+
+### **Migrations Status**
+
+- `hasura migrate status`
+
+### **Delete Migrations**
+
+**NOTE:** Move all your Migrations to a backup folder, in case you need them later.  
+_`mv migrations migrations_backup`_
+
+for delete Migrations from the Server and clean up the local Migration files
+
+- `hasura migrate delete --all --database-name <database-name>`
+- `hasura migrate delete --database-name <database-name> --version <version>`
+
+### For delete Migrations from the Server only
+
+- `hasura migrate delete --all --server --database-name <database-name>`
+- `hasura migrate delete --server --database-name <database-name> --version <version>`
+
+## Manage Metadata
+
+**`hasura metadata [commands] [flags]`**  
+commands: [ apply, clear, diff, export, inconsistency, reload ]
+
+flags:
+
+- `--admin-secret string            admin secret for Hasura GraphQL Engine (env "HASURA_GRAPHQL_ADMIN_SECRET")`
+- `--endpoint string                http(s) endpoint for Hasura GraphQL Engine (env "HASURA_GRAPHQL_ENDPOINT")`
+- `--envfile string                 .env filename to load ENV vars from (default ".env")`
+
+# Examples :
+
+### **Export Hasura Metadata**
+
+Export metadata and save it in migrations/metadata.yaml file:
+
+- `hasura metadata export`
+- `hasura metadata export --envfile example.env`
+- `hasura metadata export --admin-secret "<admin-secret>"`
+
+Write metadata to standard output in given format(json/yaml) for exported metadata _(note: this won't modify project metadata)_ Allowed values: json, yaml
+
+- `hasura metadata export --admin-secret "<admin-secret>" -o json`
+- `hasura metadata export --envfile example.env -o json`
+
+Export metadata to another instance specified by the flag:
+
+- `hasura metadata export --endpoint "<endpoint>"`
+- `hasura metadata export --envfile other_instance.env`
+
+### **Apply Hasura Metadata**
+
+**NOTE:**  
+Apply the database `Migration schema first, before apply the Metadata` Otherwise, it will result in an error saying the object does not exist.
+
+Apply Hasura GraphQL Engine metadata present in metadata.[yaml|json] file:
 
 - `hasura metadata apply`
-- `hasura migrate apply --database-name <database-name>`
+- `hasura metadata apply --envfile example.env`
+- `hasura metadata apply --admin-secret "<admin-secret>"`
+
+Apply metadata to an instance specified by the flag:
+
+- `hasura metadata apply --endpoint "<endpoint>"`
+- `hasura metadata apply  --envfile other_instance.env`
+
+Prevent inconsistent metadata from getting applied:
+
+- `hasura metadata apply --disallow-inconsistent-metadata`
+- `hasura metadata apply --envfile example.env --disallow-inconsistent-metadata`
+
+Show metadata generated from project directory without applying to server. generated metadata will be printed as JSON by default, use -o flag for other display formats
+
+- `hasura metadata apply --envfile example.env --dry-run -o json`
+
+### **Reload Hasura Metadata**
+
 - `hasura metadata reload`
+- `hasura metadata reload --admin-secret "<admin-secret>"`
+- `hasura metadata reload --endpoint "<endpoint>"`
+- `hasura metadata reload --envfile example.env`
+
+### **Clear Hasura Metadata**
+
+- `hasura metadata clear`
+- `hasura metadata clear --admin-secret "<admin-secret>"`
+- `hasura metadata clear --endpoint "<endpoint>"`
+- `hasura metadata clear --envfile example.env`
+
+### **Metadata Inconsistencies**
+
+**Alias**: inconsistencies, `ic`
+
+- `hasura metadata ic status --envfile example.env`
+- `hasura metadata ic list --envfile example.env`
+- `hasura metadata ic drop --envfile example.env`
+
+### **Diff Hasura Metadata**
+
+**_`NOTE: This command is in preview, usage and diff format may change.`_**
+
+Show changes between server metadata and the exported metadata file:
+
+- `hasura metadata diff`
+- `hasura metadata diff exp_md_1.json exp_md_2.json exp_md_3.json`
+
+Apply admin secret for Hasura GraphQL Engine:
+
+- `hasura metadata diff --admin-secret "<admin-secret>"`
+
+Specify a diff type _`[allowed values: unified-json,unified-yaml, yaml, json]`_
+
+- `hasura metadata diff --type "unified-json"`
+- `hasura metadata diff --type "json"`
+
+Diff metadata on a different Hasura instance:
+
+- `hasura metadata diff --endpoint "<endpoint>"`
+
+Using `diff` with _--envfile_
+
+- `hasura metadata diff --envfile example.env`
+
+## **Hasura Seed**
+
+### **Create Seeds**:
+
+Create a new seed file and use editor to add SQL:
+
+- `hasura seed create new_table_seed`
+- `hasura seed create new_table_seed --envfile example.env`
+- `hasura seed create new_table_seed --database-name <database-name> --envfile example.env`
+
+Create a new seed by exporting data from tables already present in the database:
+
+- `hasura seed create users_seed --from-table users`
+- `hasura seed create users_seed --from-table public.users`
+- `hasura seed create users_seed --from-table users --database-name <database-name>`
+- `hasura seed create users_seed --from-table users --envfile example.env`
+
+Export data from multiple tables:
+
+- `hasura seed create tables_seed --from-table table1 --from-table table2`
+- `hasura seed create tables_seed --from-table table1 --from-table table2 --envfile example.env`
+
+### **Apply Seeds**:
+
+Apply all seeds on the database:
+
+- `hasura seed apply`
+- `hasura seed apply --all-databases`
+- `hasura seed apply --database-name <database-name>`
+- `hasura seed apply --database-name <database-name>  --envfile example.env`
+
+Apply only a particular seed sql file:
+
+- `hasura seed apply --file <seed-file> --database-name <database-name>`
+- `hasura seed apply -f <seed-file> --database-name <database-name> --envfile example.env`
+
+## **Hasura Deploy**
+
+Apply metadata and migrations on Hasura GraphQL Engine
+
+- `hasura deploy`
+
+Apply metadata, migrations and seeds on Hasura GraphQL Engine
+
+- `hasura deploy --with-seeds`
+
+Use with admin secret and endpoint:
+
+- `hasura deploy --admin-secret "<admin-secret> --endpoint "<endpoint>"`
+
+Use with envfile:
+
+- `hasura deploy --envfile example.env`
+- `hasura deploy --with-seeds --envfile example.env`
